@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { ArrowUpRight, Check, Search } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import heroVideo from './assets/Royalty-Free 4K Drone Footage City Traffic No Copyright - MK PixelSquad (1080p).mp4'
@@ -601,7 +602,7 @@ function DetailContentSection({ pathname }: { pathname: string }) {
       </section>
       <section className="bg-[#e7e6e1]">
         <div className="mx-auto grid max-w-[1260px] gap-10 px-5 py-16 sm:px-10 sm:py-20 lg:grid-cols-[0.65fr_1.35fr] lg:px-16">
-          <div><p className="eyebrow">Good to know</p><h2 className="mt-4 max-w-sm text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">A few common questions.</h2><a className="mt-6 inline-flex items-center gap-2 text-sm font-medium underline decoration-black/25 underline-offset-4 hover:decoration-black" href="/contact">Still need help? Contact us <span aria-hidden="true">↗</span></a></div>
+          <div><p className="eyebrow">Good to know</p><h2 className="mt-4 max-w-sm text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">A few common questions.</h2><a className="mt-6 inline-flex items-center gap-2 text-sm font-medium underline decoration-black/25 underline-offset-4 hover:decoration-black" href="/contact">Still need help? Contact us <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a></div>
           <div className="border-t border-black/15">
             {content.faqs.map(([question, answer]) => (
               <details className="group border-b border-black/15 py-5" key={question}>
@@ -631,7 +632,7 @@ function DetailFooter() {
             <p className="mb-4 text-sm font-medium">Get local stories and useful updates</p>
             <form className="flex flex-col gap-3 border-b border-white/40 pb-3 sm:flex-row sm:items-center" onSubmit={(event) => { event.preventDefault(); setSubscribed(true) }}>
               <input className="min-w-0 flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/45" type="email" placeholder="Your email address" aria-label="Your email address" required />
-              <button className="button-lime w-fit" type="submit">{subscribed ? 'Thanks ✓' : 'Subscribe ↗'}</button>
+              <button className="button-lime w-fit inline-flex items-center justify-center gap-1.5" type="submit">{subscribed ? <>Thanks <Check className="h-4 w-4 shrink-0" /></> : <>Subscribe <ArrowUpRight className="h-4 w-4 shrink-0" /></>}</button>
             </form>
             <p className="mt-3 min-h-5 text-xs text-lime" aria-live="polite">{subscribed ? 'Thanks for your interest. This prototype does not save email addresses.' : ''}</p>
           </div>
@@ -641,9 +642,9 @@ function DetailFooter() {
             <Logo />
             <p className="mt-5 max-w-xs text-xs leading-relaxed text-white/40">A local marketplace for useful skills, trusted help and stronger neighborhoods.</p>
           </div>
-          <div className="footer-link-group"><p className="footer-heading">Explore</p><div className="footer-links"><a href="/">Home ↗</a><a href="/find-help">Find help ↗</a><a href="/reviews">Reviews ↗</a></div></div>
-          <div className="footer-link-group"><p className="footer-heading">Learn & join</p><div className="footer-links"><a href="/how-it-works">How it works ↗</a><a href="/become-a-helper">Become a helper ↗</a><a href="/about">About NeighborHelp ↗</a><a href="/safety">Trust & safety ↗</a></div></div>
-          <div className="footer-link-group"><p className="footer-heading">Contact</p><div className="footer-links"><a href="/contact">Contact us ↗</a><a href="mailto:hello@neighborhelp.co">hello@neighborhelp.co</a><span>Accra, Ghana</span><span>Mon–Fri · 9:00–17:00</span></div></div>
+          <div className="footer-link-group"><p className="footer-heading">Explore</p><div className="footer-links"><a href="/" className="inline-flex items-center gap-1">Home <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/find-help" className="inline-flex items-center gap-1">Find help <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/reviews" className="inline-flex items-center gap-1">Reviews <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
+          <div className="footer-link-group"><p className="footer-heading">Learn & join</p><div className="footer-links"><a href="/how-it-works" className="inline-flex items-center gap-1">How it works <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/become-a-helper" className="inline-flex items-center gap-1">Become a helper <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/about" className="inline-flex items-center gap-1">About NeighborHelp <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/safety" className="inline-flex items-center gap-1">Trust & safety <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
+          <div className="footer-link-group"><p className="footer-heading">Contact</p><div className="footer-links"><a href="/contact" className="inline-flex items-center gap-1">Contact us <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="mailto:hello@neighborhelp.co">hello@neighborhelp.co</a><span>Accra, Ghana</span><span>Mon–Fri · 9:00–17:00</span></div></div>
         </div>
         <div className="flex flex-col justify-between gap-3 border-t border-white/15 pt-6 text-[10px] text-white/40 sm:flex-row"><span>© 2025 NeighborHelp Accra.</span><span>Made for the neighborhood.</span></div>
       </div>
@@ -769,7 +770,7 @@ function DetailPage({ pathname }: DetailPageProps) {
             <p className="mt-7 max-w-xl text-base leading-relaxed text-black/60 sm:text-lg">{page.intro}</p>
             {highlight && (
               <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
-                <a className="button-dark inline-flex items-center gap-3" href={primaryAction.href}>{primaryAction.label}<span aria-hidden="true">↗</span></a>
+                <a className="button-dark inline-flex items-center gap-3" href={primaryAction.href}>{primaryAction.label}<ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a>
                 <a className="text-sm font-medium text-black/65 underline decoration-black/20 underline-offset-4 transition hover:text-black hover:decoration-black" href={secondaryAction.href}>{secondaryAction.label}</a>
               </div>
             )}
@@ -782,7 +783,7 @@ function DetailPage({ pathname }: DetailPageProps) {
                   <p className="mt-7 text-5xl font-medium leading-[0.95] tracking-[-0.04em] text-white sm:text-6xl">{highlight.metric}</p>
                   <h2 className="mt-3 max-w-xs text-xl font-medium leading-tight text-white">{highlight.title}</h2>
                 </div>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-lime text-xl text-black" aria-hidden="true">↗</span>
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-lime text-black" aria-hidden="true"><ArrowUpRight className="h-6 w-6 stroke-[2.5]" /></span>
               </div>
               <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/55">{highlight.detail}</p>
               <div className="mt-8 border-t border-white/15 pt-5">
@@ -860,7 +861,7 @@ function DetailPage({ pathname }: DetailPageProps) {
                     <span>★ {provider.rating} · {provider.jobs}</span>
                     <span>{provider.distance} km · {provider.price}</span>
                   </div>
-                  <a href={`/contact?helper=${encodeURIComponent(provider.name)}`} className="helper-result-action mt-4 inline-flex w-full items-center justify-center border border-black/15 bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black/80 sm:w-fit"><span className="helper-action-full">Contact helper ↗</span><span className="helper-action-short">Contact ↗</span></a>
+                  <a href={`/contact?helper=${encodeURIComponent(provider.name)}`} className="helper-result-action mt-4 inline-flex w-full items-center justify-center border border-black/15 bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black/80 sm:w-fit"><span className="helper-action-full inline-flex items-center gap-1">Contact helper <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span><span className="helper-action-short inline-flex items-center gap-1">Contact <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></a>
                 </article>
               ))}
               {!directoryProviders.length && (
@@ -881,7 +882,7 @@ function DetailPage({ pathname }: DetailPageProps) {
           <div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
             <div className="mb-9 flex flex-wrap items-end justify-between gap-6 border-b border-black/15 pb-6">
               <div><p className="eyebrow">From around the neighborhood</p><h2 className="mt-3 text-3xl font-medium tracking-[-0.035em] sm:text-4xl">Good work. Good people.</h2></div>
-              <a className="text-sm font-medium underline decoration-black/25 underline-offset-4 hover:decoration-black" href="/find-help">Find your neighbor ↗</a>
+              <a className="inline-flex items-center gap-1 text-sm font-medium underline decoration-black/25 underline-offset-4 hover:decoration-black" href="/find-help">Find your neighbor <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a>
             </div>
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
               {reviews.map((review, index) => (
@@ -908,27 +909,27 @@ function DetailPage({ pathname }: DetailPageProps) {
             <div className="mb-10 max-w-xl"><p className="eyebrow text-lime">Three simple steps</p><h2 className="mt-4 text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">Good help should feel easy to find.</h2></div>
             <div className="grid gap-3 md:grid-cols-3">
               {[
-                ['01', 'Tell us what you need', 'Search by service, location or the kind of help you are looking for.', '⌕'],
-                ['02', 'Choose your neighbor', 'Compare profiles, reviews, prices and location before you decide.', '↗'],
-                ['03', 'Request an introduction', 'Share a short note, agree on scope and price directly, then review the work together.', '✓'],
+                ['01', 'Tell us what you need', 'Search by service, location or the kind of help you are looking for.', <Search key="1" className="h-5 w-5" />],
+                ['02', 'Choose your neighbor', 'Compare profiles, reviews, prices and location before you decide.', <ArrowUpRight key="2" className="h-5 w-5" />],
+                ['03', 'Request an introduction', 'Share a short note, agree on scope and price directly, then review the work together.', <Check key="3" className="h-5 w-5" />],
               ].map(([number, title, description, icon]) => (
-                <article className="process-card" key={number}>
-                  <div className="flex items-start justify-between"><span className="text-xs text-lime">{number} / 03</span><span className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-xl text-lime" aria-hidden="true">{icon}</span></div>
-                  <h3 className="mt-12 text-2xl font-medium leading-tight tracking-[-0.025em]">{title}</h3>
-                  <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">{description}</p>
+                <article className="process-card" key={number as string}>
+                  <div className="flex items-start justify-between"><span className="text-xs text-lime">{number as string} / 03</span><span className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-lime" aria-hidden="true">{icon as React.ReactNode}</span></div>
+                  <h3 className="mt-12 text-2xl font-medium leading-tight tracking-[-0.025em]">{title as string}</h3>
+                  <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">{description as string}</p>
                 </article>
               ))}
             </div>
             <div className="mt-8 flex flex-col justify-between gap-5 border-t border-white/15 pt-7 sm:flex-row sm:items-center">
               <p className="max-w-lg text-sm leading-relaxed text-white/55">No complicated booking steps. Have a clear conversation and make sure the details feel right to both sides.</p>
-              <a className="inline-flex w-fit items-center gap-3 bg-lime px-5 py-4 text-xs font-semibold uppercase tracking-wide text-black transition hover:bg-white" href="/find-help">Meet local helpers <span aria-hidden="true">↗</span></a>
+              <a className="inline-flex w-fit items-center gap-2 bg-lime px-5 py-4 text-xs font-semibold uppercase tracking-wide text-black transition hover:bg-white" href="/find-help">Meet local helpers <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a>
             </div>
           </div>
         </section>
       )}
 
-      {pathname === '/become-a-helper' && <section id="helper-application" className="bg-lime"><div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16"><div className="mb-10 max-w-xl"><p className="eyebrow">Start with the basics</p><h2 className="mt-3 text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">Tell us what you bring.</h2><p className="mt-4 text-sm leading-relaxed text-black/65">Share a few details. This prototype won’t submit or store your information.</p></div><div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20"><aside className="border-t border-black/15 pt-5"><p className="text-xs uppercase tracking-[0.14em] text-black/55">A good first profile includes</p><ul className="mt-5 space-y-4 text-sm"><li className="flex gap-3"><span>01</span><span>A clear service you can provide</span></li><li className="flex gap-3"><span>02</span><span>The neighborhood you work in</span></li><li className="flex gap-3"><span>03</span><span>A way for neighbors to reach you</span></li></ul></aside><form className="helper-application-form" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="helper-name">Your name</label><input id="helper-name" name="name" autoComplete="name" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your name" required /><label className="sr-only" htmlFor="helper-skill">What can you help with?</label><input id="helper-skill" name="skill" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="What can you help with?" required /><label className="sr-only" htmlFor="helper-area">Your neighborhood</label><input id="helper-area" name="area" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your neighborhood" required /><label className="sr-only" htmlFor="helper-email">Your email</label><input id="helper-email" name="email" type="email" autoComplete="email" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your email address" required /><div className="flex flex-wrap items-center gap-5 pt-4"><button className="bg-black px-6 py-4 text-xs font-semibold text-white transition hover:bg-black/75" type="submit">Start your application ↗</button><p className="min-h-5 text-sm text-black/75" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store applications.' : ''}</p></div></form></div></div></section>}
-      {pathname === '/contact' && <section className="bg-charcoal text-white"><div className="mx-auto max-w-[1260px] px-5 py-20 sm:px-10 lg:px-16"><div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="eyebrow text-lime">We’re here to help</p><h2 className="mt-5 max-w-sm text-5xl font-medium leading-[0.9] sm:text-7xl">{contactHelper ? `Contact ${contactHelper}.` : 'Say hello.'}</h2><div className="mt-10 space-y-3 text-sm text-white/60"><p>{contactHelper ? `Send an introduction request for ${contactHelper}.` : 'Have a question or partnership idea? Send us a note.'}</p><p>hello@neighborhelp.co</p><p>Accra, Ghana · Mon–Fri, 9:00–17:00</p></div></div><form className="grid gap-5" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder="Your name" required /><label className="sr-only" htmlFor="contact-email">Email address</label><input id="contact-email" name="email" autoComplete="email" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" type="email" placeholder="Email address" required /><label className="sr-only" htmlFor="contact-topic">What can we help with?</label><select id="contact-topic" name="topic" className="border-b border-white/30 bg-charcoal px-0 py-4 text-white/70 outline-none" defaultValue={contactHelper ? 'Finding a helper' : ''} required><option value="" disabled>What can we help with?</option><option>Finding a helper</option><option>Becoming a helper</option><option>Partnerships</option></select><label className="sr-only" htmlFor="contact-message">Tell us a little more</label><textarea id="contact-message" name="message" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder={contactHelper ? `What do you need help with from ${contactHelper}?` : 'Tell us a little more'} rows={4} required /><button className="mt-3 w-fit bg-lime px-6 py-4 text-xs font-semibold text-black transition hover:bg-white" type="submit">Send message ↗</button><p className="min-h-5 text-sm text-lime" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store messages.' : ''}</p></form></div></div></section>}
+      {pathname === '/become-a-helper' && <section id="helper-application" className="bg-lime"><div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16"><div className="mb-10 max-w-xl"><p className="eyebrow">Start with the basics</p><h2 className="mt-3 text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">Tell us what you bring.</h2><p className="mt-4 text-sm leading-relaxed text-black/65">Share a few details. This prototype won’t submit or store your information.</p></div><div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20"><aside className="border-t border-black/15 pt-5"><p className="text-xs uppercase tracking-[0.14em] text-black/55">A good first profile includes</p><ul className="mt-5 space-y-4 text-sm"><li className="flex gap-3"><span>01</span><span>A clear service you can provide</span></li><li className="flex gap-3"><span>02</span><span>The neighborhood you work in</span></li><li className="flex gap-3"><span>03</span><span>A way for neighbors to reach you</span></li></ul></aside><form className="helper-application-form" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="helper-name">Your name</label><input id="helper-name" name="name" autoComplete="name" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your name" required /><label className="sr-only" htmlFor="helper-skill">What can you help with?</label><input id="helper-skill" name="skill" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="What can you help with?" required /><label className="sr-only" htmlFor="helper-area">Your neighborhood</label><input id="helper-area" name="area" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your neighborhood" required /><label className="sr-only" htmlFor="helper-email">Your email</label><input id="helper-email" name="email" type="email" autoComplete="email" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your email address" required /><div className="flex flex-wrap items-center gap-5 pt-4"><button className="inline-flex items-center gap-2 bg-black px-6 py-4 text-xs font-semibold text-white transition hover:bg-black/75" type="submit">Start your application <ArrowUpRight className="h-4 w-4 shrink-0" /></button><p className="min-h-5 text-sm text-black/75" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store applications.' : ''}</p></div></form></div></div></section>}
+      {pathname === '/contact' && <section className="bg-charcoal text-white"><div className="mx-auto max-w-[1260px] px-5 py-20 sm:px-10 lg:px-16"><div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="eyebrow text-lime">We’re here to help</p><h2 className="mt-5 max-w-sm text-5xl font-medium leading-[0.9] sm:text-7xl">{contactHelper ? `Contact ${contactHelper}.` : 'Say hello.'}</h2><div className="mt-10 space-y-3 text-sm text-white/60"><p>{contactHelper ? `Send an introduction request for ${contactHelper}.` : 'Have a question or partnership idea? Send us a note.'}</p><p>hello@neighborhelp.co</p><p>Accra, Ghana · Mon–Fri, 9:00–17:00</p></div></div><form className="grid gap-5" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder="Your name" required /><label className="sr-only" htmlFor="contact-email">Email address</label><input id="contact-email" name="email" autoComplete="email" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" type="email" placeholder="Email address" required /><label className="sr-only" htmlFor="contact-topic">What can we help with?</label><select id="contact-topic" name="topic" className="border-b border-white/30 bg-charcoal px-0 py-4 text-white/70 outline-none" defaultValue={contactHelper ? 'Finding a helper' : ''} required><option value="" disabled>What can we help with?</option><option>Finding a helper</option><option>Becoming a helper</option><option>Partnerships</option></select><label className="sr-only" htmlFor="contact-message">Tell us a little more</label><textarea id="contact-message" name="message" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder={contactHelper ? `What do you need help with from ${contactHelper}?` : 'Tell us a little more'} rows={4} required /><button className="mt-3 inline-flex w-fit items-center gap-2 bg-lime px-6 py-4 text-xs font-semibold text-black transition hover:bg-white" type="submit">Send message <ArrowUpRight className="h-4 w-4 shrink-0" /></button><p className="min-h-5 text-sm text-lime" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store messages.' : ''}</p></form></div></div></section>}
       {(pathname === '/about' || pathname === '/safety') && (
         <section className="bg-charcoal text-white">
           <div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
@@ -953,7 +954,7 @@ function DetailPage({ pathname }: DetailPageProps) {
             </div>
             <div className="mt-10 flex flex-col justify-between gap-5 border-t border-white/15 pt-7 sm:flex-row sm:items-center">
               <p className="max-w-lg text-sm leading-relaxed text-white/55">{pathname === '/about' ? 'Good help is personal. NeighborHelp is a starting point for neighbors to meet and work together.' : 'NeighborHelp is an introduction point, not a guarantee. Trust your judgment and only proceed when the plan feels right.'}</p>
-              <a className="inline-flex w-fit items-center gap-3 border border-white/25 px-5 py-4 text-xs font-semibold uppercase tracking-wide transition hover:border-lime hover:text-lime" href={pathname === '/about' ? '/find-help' : '/how-it-works'}>{pathname === '/about' ? 'Explore the directory' : 'See how it works'} <span aria-hidden="true">↗</span></a>
+              <a className="inline-flex w-fit items-center gap-2 border border-white/25 px-5 py-4 text-xs font-semibold uppercase tracking-wide transition hover:border-lime hover:text-lime" href={pathname === '/about' ? '/find-help' : '/how-it-works'}>{pathname === '/about' ? 'Explore the directory' : 'See how it works'} <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a>
             </div>
           </div>
         </section>
@@ -1042,7 +1043,7 @@ function AccountPage({ onDashboard }: { onDashboard: (role: AccountRole, name: s
                   <input id="account-password" name="password" type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} minLength={mode === 'signup' ? 8 : undefined} required className="border border-black/15 bg-transparent px-4 py-3 text-sm outline-none transition focus:border-black" placeholder={mode === 'signup' ? 'Create a password (8+ characters)' : 'Enter your password'} />
                 </label>
                 {mode === 'signin' && <button type="button" onClick={() => setStatus('Password recovery will be available when account authentication is connected.')} className="justify-self-end text-xs text-black/55 underline underline-offset-4 hover:text-black">Forgot password?</button>}
-                <button type="submit" className="mt-2 bg-black px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">{mode === 'signup' ? 'Create account' : 'Sign in'} <span aria-hidden="true">↗</span></button>
+                <button type="submit" className="mt-2 inline-flex items-center justify-center gap-2 bg-black px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">{mode === 'signup' ? 'Create account' : 'Sign in'} <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></button>
                 {status && <p className="text-xs leading-relaxed text-black/65" role="status" aria-live="polite">{status}</p>}
               </form>
             </>
@@ -1239,7 +1240,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                 <h1 className="text-4xl font-medium leading-[0.95] tracking-[-0.04em] sm:text-6xl">Welcome, {name}</h1>
                 <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60">Find trusted local people for the tasks and projects you need help with.</p>
               </div>
-              <a href="/find-help" className="bg-lime px-5 py-4 text-xs font-semibold text-black transition hover:bg-white">Browse all helpers ↗</a>
+              <a href="/find-help" className="inline-flex items-center gap-2 bg-lime px-5 py-4 text-xs font-semibold text-black transition hover:bg-white">Browse all helpers <ArrowUpRight className="h-4 w-4 shrink-0" /></a>
             </div>
             <div className="mt-8 grid grid-cols-2 border-t border-white/15 pt-5 sm:grid-cols-3">
               <div><p className="text-2xl font-medium">{providers.length}</p><p className="mt-1 text-[10px] uppercase tracking-wide text-white/45">Local profiles · sample</p></div>
@@ -1258,7 +1259,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                 <p className="eyebrow">A good place to start</p>
                 <h2 id="helper-matches-heading" className="mt-3 text-3xl font-medium tracking-[-0.035em] sm:text-4xl">Helpers for your next task</h2>
               </div>
-              <a href="/how-it-works" className="text-xs font-semibold underline underline-offset-4">How hiring works ↗</a>
+              <a href="/how-it-works" className="inline-flex items-center gap-1 text-xs font-semibold underline underline-offset-4">How hiring works <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
             </div>
             <div className="mt-5 grid gap-3 border border-black/10 bg-white p-4 sm:grid-cols-2">
               <label className="grid gap-2 text-xs font-medium" htmlFor="hire-service-filter">
@@ -1293,9 +1294,9 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                       <span>★ {helper.rating} · {helper.jobs}</span><span>{helper.price}</span><span>{helper.distance} km away</span>
                     </div>
                     <div className="mt-5 flex gap-2">
-                      <a href={`/contact?helper=${encodeURIComponent(helper.name)}`} className="flex-1 bg-black px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">Contact ↗</a>
-                      <button type="button" aria-pressed={isSaved} onClick={() => setSavedHelpers((current) => isSaved ? current.filter((nameToRemove) => nameToRemove !== helper.name) : [...current, helper.name])} className="border border-black/15 px-3 py-3 text-[10px] font-semibold transition hover:border-black" aria-label={`${isSaved ? 'Remove saved' : 'Save'} ${helper.name}`}>
-                        {isSaved ? 'Saved ✓' : 'Save'}
+                      <a href={`/contact?helper=${encodeURIComponent(helper.name)}`} className="flex-1 inline-flex items-center justify-center gap-1 bg-black px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">Contact <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
+                      <button type="button" aria-pressed={isSaved} onClick={() => setSavedHelpers((current) => isSaved ? current.filter((nameToRemove) => nameToRemove !== helper.name) : [...current, helper.name])} className="inline-flex items-center gap-1 border border-black/15 px-3 py-3 text-[10px] font-semibold transition hover:border-black" aria-label={`${isSaved ? 'Remove saved' : 'Save'} ${helper.name}`}>
+                        {isSaved ? <>Saved <Check className="h-3.5 w-3.5 shrink-0" /></> : 'Save'}
                       </button>
                     </div>
                   </article>
@@ -1510,7 +1511,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-4 sm:col-span-2">
-                <button type="submit" className="bg-black px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">Update profile preview ↗</button>
+                <button type="submit" className="inline-flex items-center gap-2 bg-black px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">Update profile preview <ArrowUpRight className="h-4 w-4 shrink-0" /></button>
                 {profileStatus && <p className="text-xs text-black/55" role="status" aria-live="polite">{profileStatus}</p>}
               </div>
             </form>
@@ -1554,7 +1555,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                 </div>
               </div>
             )}
-            <a href="/safety" className="mt-6 inline-block text-xs font-semibold underline underline-offset-4">Profile and safety tips ↗</a>
+            <a href="/safety" className="mt-6 inline-flex items-center gap-1 text-xs font-semibold underline underline-offset-4">Profile and safety tips <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
           </aside>
         </div>
 
@@ -1593,8 +1594,8 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                     <p className="mt-3 text-sm leading-relaxed text-black/60">{job.description}</p>
                     <p className="mt-3 text-xs text-black/45">Posted by {job.client} · Demo client</p>
                   </details>
-                  <button type="button" disabled={isInterested} onClick={() => expressInterest(job)} className={`mt-5 w-full px-4 py-3 text-xs font-semibold transition sm:w-auto ${isInterested ? 'border border-black/15 bg-paper text-black/45' : 'bg-black text-white hover:bg-black/75'}`}>
-                    {isInterested ? 'Interest noted ✓' : 'I’m interested ↗'}
+                  <button type="button" disabled={isInterested} onClick={() => expressInterest(job)} className={`mt-5 w-full inline-flex items-center justify-center gap-1 px-4 py-3 text-xs font-semibold transition sm:w-auto ${isInterested ? 'border border-black/15 bg-paper text-black/45' : 'bg-black text-white hover:bg-black/75'}`}>
+                    {isInterested ? <>Interest noted <Check className="h-4 w-4 shrink-0" /></> : <>I’m interested <ArrowUpRight className="h-4 w-4 shrink-0" /></>}
                   </button>
                 </article>
               )
@@ -1606,7 +1607,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-black/10 pt-6">
           <p className="text-xs text-black/45">Everything here is a local demo preview and resets when you leave this page.</p>
-          <a href="/how-it-works" className="text-xs font-semibold underline underline-offset-4">How NeighborHelp works ↗</a>
+          <a href="/how-it-works" className="inline-flex items-center gap-1 text-xs font-semibold underline underline-offset-4">How NeighborHelp works <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
         </div>
       </section>
     </main>
@@ -1747,14 +1748,14 @@ function App() {
           <a href="/reviews" className="nav-link">Reviews</a>
           <a href="/how-it-works" className="nav-link">How it works</a>
           <a href="/become-a-helper" className="nav-link">Become a helper</a>
-          <a className="nav-start" href="/account">Get started <span>↗</span></a>
+          <a className="nav-start inline-flex items-center gap-1" href="/account">Get started <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
           <form className="nav-search" onSubmit={(event) => { event.preventDefault(); setMenuOpen(false); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }) }}>
             <div className="nav-search-field">
               <input id="nav-search-input" value={search} onChange={(event) => setSearch(event.target.value)} required />
               <label htmlFor="nav-search-input">What do you need help with?</label>
               <span />
             </div>
-            <button type="submit">Find help <span>↗</span></button>
+            <button type="submit" className="inline-flex items-center gap-1">Find help <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></button>
           </form>
         </div>
         <button
@@ -1824,12 +1825,12 @@ function App() {
                 <span>★ {provider.rating} · {provider.jobs}</span>
                 <span className="font-medium">{provider.distance} km · {provider.price}</span>
               </div>
-              <button className="helper-result-action btn-31 mt-4 w-full sm:w-fit" onClick={() => openBooking(provider)}><span className="text-container"><span className="helper-action-full text">View profile ↗</span><span className="helper-action-short text">Profile ↗</span></span></button>
+              <button className="helper-result-action btn-31 mt-4 w-full sm:w-fit" onClick={() => openBooking(provider)}><span className="text-container"><span className="helper-action-full text inline-flex items-center gap-1">View profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span><span className="helper-action-short text inline-flex items-center gap-1">Profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></span></button>
             </article>
           ))}
           {!filteredProviders.length && <div className="col-span-full border border-dashed border-black/30 px-6 py-16 text-center"><p className="text-xl font-medium">No helpers found</p><p className="mt-2 text-sm text-black/55">Try another search or browse all services.</p><button className="mt-5 text-xs underline" onClick={() => { setCategory('All services'); setSearch('') }}>Clear filters</button></div>}
         </div>
-        {filteredProviders.length > 4 && <div className="mt-10 text-center"><a href="/find-help" className="btn-more-profiles inline-block">View all 50 helpers ↗</a></div>}
+        {filteredProviders.length > 4 && <div className="mt-10 text-center"><a href="/find-help" className="btn-more-profiles inline-flex items-center gap-2">View all 50 helpers <ArrowUpRight className="h-4 w-4 shrink-0" /></a></div>}
       </section>
 
       <section className="border-y border-black/10 bg-white/35">
@@ -1883,7 +1884,7 @@ function App() {
 
       <section id="how-it-works" className="bg-charcoal text-white"><div className="mx-auto max-w-[1260px] px-5 py-24 sm:px-10 lg:px-16"><div className="flex flex-wrap justify-between gap-8"><div><ScrollRevealLines lines={['Simple by design']} className="eyebrow text-lime" /><ScrollRevealLines lines={['Help is closer than', 'you think.']} className="mt-4 max-w-lg text-5xl font-medium leading-[0.9] tracking-[-0.035em] sm:text-7xl" /></div><ScrollRevealLines lines={['A safer, simpler way to exchange skills', 'and support the people in your community.']} className="max-w-xs self-end text-sm leading-relaxed text-white/50" delay={140} /></div><div className="mt-20 grid gap-0 border-t border-white/15 md:grid-cols-3">{[['01', 'Tell us what you need', 'Search by service, location or the kind of help you are looking for.'], ['02', 'Choose your neighbor', 'Compare profiles, reviews, prices and availability before you decide.'], ['03', 'Get it done', 'Book securely, chat directly and leave a review when the job is complete.']].map(([number, title, description]) => <div className="border-b border-white/15 py-8 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0" key={number}><ScrollRevealLines lines={[number]} className="text-xs text-lime" /><ScrollRevealLines lines={[title]} className="mt-14 text-2xl tracking-[-0.02em]" delay={140} /><ScrollRevealLines lines={[description]} className="mt-4 max-w-xs text-sm leading-relaxed text-white/50" delay={280} /></div>)}</div></div></section>
 
-      <section id="become-a-helper" className="mx-auto grid max-w-[1260px] gap-3 px-5 py-24 sm:px-10 lg:grid-cols-2 lg:px-16"><div className="bg-lime p-8 sm:p-12"><ScrollRevealLines lines={['For skilled neighbors']} className="eyebrow text-black/60" /><ScrollRevealLines lines={['Your skills can take', 'you further.']} className="mt-16 max-w-md text-5xl font-medium leading-[0.9] tracking-[-0.035em] sm:text-7xl" /><ScrollRevealLines lines={['Earn on your own terms, grow your reputation', 'and make a real difference in your community.']} className="mt-8 max-w-sm text-sm leading-relaxed text-black/65" delay={140} /><a href="/become-a-helper" className="mt-10 inline-block border border-black px-5 py-4 text-xs font-semibold transition hover:bg-black hover:text-white">Become a helper ↗</a></div><div className="flex min-h-[440px] flex-col justify-between bg-[#deded8] p-8 sm:p-12"><ScrollRevealLines lines={['A community that shows up']} className="eyebrow" /><div><ScrollRevealLines lines={['“I found a designer down the road', 'who understood exactly what I needed.”']} className="max-w-md text-4xl font-medium leading-[0.95] tracking-[-0.035em] sm:text-6xl" /><div className="mt-10 flex items-center gap-3 text-xs"><span className="grid h-10 w-10 place-items-center rounded-full bg-black text-white">EA</span><ScrollRevealLines lines={['Esther A.', 'NeighborHelp member']} /></div></div></div></section>
+      <section id="become-a-helper" className="mx-auto grid max-w-[1260px] gap-3 px-5 py-24 sm:px-10 lg:grid-cols-2 lg:px-16"><div className="bg-lime p-8 sm:p-12"><ScrollRevealLines lines={['For skilled neighbors']} className="eyebrow text-black/60" /><ScrollRevealLines lines={['Your skills can take', 'you further.']} className="mt-16 max-w-md text-5xl font-medium leading-[0.9] tracking-[-0.035em] sm:text-7xl" /><ScrollRevealLines lines={['Earn on your own terms, grow your reputation', 'and make a real difference in your community.']} className="mt-8 max-w-sm text-sm leading-relaxed text-black/65" delay={140} /><a href="/become-a-helper" className="mt-10 inline-flex items-center gap-2 border border-black px-5 py-4 text-xs font-semibold transition hover:bg-black hover:text-white">Become a helper <ArrowUpRight className="h-4 w-4 shrink-0" /></a></div><div className="flex min-h-[440px] flex-col justify-between bg-[#deded8] p-8 sm:p-12"><ScrollRevealLines lines={['A community that shows up']} className="eyebrow" /><div><ScrollRevealLines lines={['“I found a designer down the road', 'who understood exactly what I needed.”']} className="max-w-md text-4xl font-medium leading-[0.95] tracking-[-0.035em] sm:text-6xl" /><div className="mt-10 flex items-center gap-3 text-xs"><span className="grid h-10 w-10 place-items-center rounded-full bg-black text-white">EA</span><ScrollRevealLines lines={['Esther A.', 'NeighborHelp member']} /></div></div></div></section>
 
       <section className="bg-[#deded8]">
         <div className="mx-auto max-w-[1260px] px-5 py-24 sm:px-10 lg:px-16">
@@ -1918,13 +1919,13 @@ function App() {
               <span className="text-[10px] uppercase tracking-[0.16em] text-black/45">For residents</span>
               <h3 className="mt-8 text-2xl font-medium tracking-[-0.025em]">Find someone nearby.</h3>
               <p className="mt-3 text-sm leading-relaxed text-black/60">Browse local services, compare the details and choose how to reach out.</p>
-              <span className="mt-7 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide">Explore helpers <span aria-hidden="true">↗</span></span>
+              <span className="mt-7 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide">Explore helpers <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></span>
             </a>
             <a href="/become-a-helper" className="home-path-card home-path-card-lime">
               <span className="text-[10px] uppercase tracking-[0.16em] text-black/55">For skilled neighbors</span>
               <h3 className="mt-8 text-2xl font-medium tracking-[-0.025em]">Share what you do.</h3>
               <p className="mt-3 text-sm leading-relaxed text-black/65">Introduce your service to people looking for useful skills around Accra.</p>
-              <span className="mt-7 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide">Join the network <span aria-hidden="true">↗</span></span>
+              <span className="mt-7 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide">Join the network <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></span>
             </a>
           </div>
         </div>
@@ -1945,16 +1946,16 @@ function App() {
                   <label htmlFor="footer-email">Your email address</label>
                   <span className="subscribe-underline" />
                 </div>
-                <button className="button-lime subscribe-button shrink-0 self-center" type="submit">{newsletterSubmitted ? 'Thanks' : 'Subscribe'} <span className="subscribe-arrow ml-2 inline-block leading-none sm:ml-3">↗</span></button>
+                <button className="button-lime subscribe-button shrink-0 self-center inline-flex items-center justify-center gap-1.5" type="submit">{newsletterSubmitted ? 'Thanks' : 'Subscribe'} <ArrowUpRight className="subscribe-arrow h-4 w-4 shrink-0" /></button>
               </form>
               <p className="mt-3 min-h-5 text-xs text-lime" aria-live="polite">{newsletterSubmitted ? 'This prototype does not save email addresses.' : ''}</p>
             </div>
           </section>
           <section className="detail-footer-links-grid grid grid-cols-2 gap-x-6 gap-y-9 py-14 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
             <div className="col-span-2 lg:col-span-1"><Logo /><ScrollRevealLines lines={['A local marketplace for useful skills,', 'trusted help and stronger neighborhoods.']} className="mt-5 max-w-xs text-xs leading-relaxed text-white/40" /></div>
-            <div className="footer-link-group"><p className="footer-heading">Explore</p><div className="footer-links"><a href="/">Home ↗</a><a href="/find-help">Find help ↗</a><a href="/reviews">Neighbor stories ↗</a></div></div>
-            <div className="footer-link-group"><p className="footer-heading">Learn & join</p><div className="footer-links"><a href="/how-it-works">How it works ↗</a><a href="/become-a-helper">Become a helper ↗</a><a href="/about">About NeighborHelp ↗</a><a href="/safety">Trust & safety ↗</a></div></div>
-            <div className="footer-link-group"><p className="footer-heading">Contact</p><div className="footer-links"><a href="/contact">Contact us ↗</a><a href="mailto:hello@neighborhelp.co">hello@neighborhelp.co</a><span>Accra, Ghana</span><span>Mon–Fri · 9:00–17:00</span></div></div>
+            <div className="footer-link-group"><p className="footer-heading">Explore</p><div className="footer-links"><a href="/" className="inline-flex items-center gap-1">Home <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/find-help" className="inline-flex items-center gap-1">Find help <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/reviews" className="inline-flex items-center gap-1">Neighbor stories <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
+            <div className="footer-link-group"><p className="footer-heading">Learn & join</p><div className="footer-links"><a href="/how-it-works" className="inline-flex items-center gap-1">How it works <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/become-a-helper" className="inline-flex items-center gap-1">Become a helper <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/about" className="inline-flex items-center gap-1">About NeighborHelp <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/safety" className="inline-flex items-center gap-1">Trust & safety <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
+            <div className="footer-link-group"><p className="footer-heading">Contact</p><div className="footer-links"><a href="/contact" className="inline-flex items-center gap-1">Contact us <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="mailto:hello@neighborhelp.co">hello@neighborhelp.co</a><span>Accra, Ghana</span><span>Mon–Fri · 9:00–17:00</span></div></div>
           </section>
           <div className="flex flex-col justify-between gap-4 border-t border-white/15 py-7 text-[10px] text-white/40 sm:flex-row"><ScrollRevealLines lines={['© 2025 NeighborHelp Accra.']} /><ScrollRevealLines lines={['Made for the neighborhood.']} /></div>
         </div>
@@ -1969,7 +1970,7 @@ function App() {
             </div>
             {booked ? (
               <div className="py-16 text-center" role="status">
-                <span className="text-4xl text-lime">✓</span>
+                <Check className="h-10 w-10 text-lime mx-auto stroke-[2.5]" />
                 <h3 className="mt-5 text-2xl font-medium">You’re ready to connect</h3>
                 <p className="mt-3 text-sm text-black/55">Your request preview is complete. This prototype does not send a real request to {selectedProvider.name}.</p>
                 <button className="mt-8 border border-black px-5 py-3 text-xs" onClick={() => setSelectedProvider(null)}>Done</button>
@@ -1985,7 +1986,7 @@ function App() {
                 <form onSubmit={(event) => { event.preventDefault(); setBooked(true) }}>
                   <label className="mt-7 block text-xs font-medium" htmlFor="request-note">What do you need help with?</label>
                   <textarea id="request-note" name="request" rows={3} required placeholder="Tell them a little about your project..." className="mt-2 w-full resize-none border border-black/20 bg-transparent p-3 text-sm outline-none focus:border-black" />
-                  <button className="button-lime mt-5 w-full" type="submit">Request an introduction ↗</button>
+                  <button className="button-lime mt-5 w-full inline-flex items-center justify-center gap-2" type="submit">Request an introduction <ArrowUpRight className="h-4 w-4 shrink-0" /></button>
                 </form>
               </>
             )}
