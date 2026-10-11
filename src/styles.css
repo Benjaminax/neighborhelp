@@ -58,6 +58,17 @@ input[type="email"]:-webkit-autofill:focus {
   caret-color: #111;
   transition: background-color 9999s ease-out 0s;
 }
+.footer-newsletter-form input { color: #fff; -webkit-text-fill-color: #fff; caret-color: #fff; }
+.footer-newsletter-form input:-webkit-autofill,
+.footer-newsletter-form input:-webkit-autofill:hover,
+.footer-newsletter-form input:-webkit-autofill:focus,
+.footer-newsletter-form input:-webkit-autofill:active {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0 1000px #000 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+  transition: background-color 9999s ease-out 0s;
+}
 .detail-back-button {
   display: flex;
   height: 3em;
@@ -104,7 +115,6 @@ input[type="email"]:-webkit-autofill:focus {
 .detail-hero-lime::after { border-color: rgb(17 17 17 / 0.09); }
 .detail-hero-lime .detail-hero-card { background: #151515; }
 .helper-result-area-mobile { display: none; }
-.helper-action-short { display: none; }
 @media (max-width: 767px) {
   .detail-hero::after { right: -6rem; bottom: -6rem; width: 18rem; height: 18rem; }
   .detail-hero-card::after { right: -3rem; bottom: -4rem; width: 10rem; height: 10rem; }
@@ -117,8 +127,6 @@ input[type="email"]:-webkit-autofill:focus {
   .helper-result-action { grid-column: 2; grid-row: 1 / 3; width: auto !important; margin-top: 0 !important; white-space: nowrap; }
   .helper-result-area-mobile { display: block; }
   .helper-result-area-chip { display: none; }
-  .helper-action-full { display: none !important; }
-  .helper-action-short { display: inline !important; }
 }
 .burger.detail-burger span { background: #111; }
 .review-card { display: flex; min-height: 21rem; flex-direction: column; justify-content: space-between; border: 1px solid rgb(17 17 17 / 0.1); border-radius: 0.9rem; background: #f1f1ef; padding: 1.75rem; }
@@ -144,7 +152,27 @@ input[type="email"]:-webkit-autofill:focus {
 .nav-start:hover { color: #edff62; }
 .nav-search { display: flex; align-items: center; gap: 0.75rem; }
 .nav-search-field { position: relative; width: 13rem; }
-.nav-search-field input { width: 100%; border: 0; border-bottom: 1px solid rgb(255 255 255 / 0.55); padding: 0.95rem 0 0.45rem; background: transparent; color: white; font: inherit; font-size: 0.85rem; outline: none; }
+.nav-search-field input { width: 100%; border: 0; border-bottom: 1px solid rgb(255 255 255 / 0.55); padding: 0.95rem 0 0.45rem; background: transparent; color: white; -webkit-text-fill-color: white; caret-color: white; mix-blend-mode: difference; font: inherit; font-size: 0.85rem; outline: none; }
+.nav-search-field input:-webkit-autofill,
+.nav-search-field input:-webkit-autofill:hover,
+.nav-search-field input:-webkit-autofill:focus {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  -webkit-text-fill-color: currentColor;
+  caret-color: currentColor;
+  transition: background-color 9999s ease-out 0s;
+}
+.contact-form input { color: white; -webkit-text-fill-color: white; caret-color: white; }
+.contact-form input:-webkit-autofill,
+.contact-form input:-webkit-autofill:hover,
+.contact-form input:-webkit-autofill:focus,
+.contact-form input:-webkit-autofill:active {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0 1000px #151515 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+  transition: background-color 9999s ease-out 0s;
+}
 .nav-search-field input:focus-visible { outline: none; outline-offset: 0; }
 .nav-search-field label { position: absolute; top: 0.72rem; left: 0; color: rgb(255 255 255 / 0.65); font-size: 0.85rem; pointer-events: none; transition: all 0.2s ease; }
 .nav-search-field input:focus ~ label, .nav-search-field input:valid ~ label { top: -0.4rem; color: #edff62; font-size: 0.68rem; }
@@ -183,7 +211,7 @@ input[type="email"]:-webkit-autofill:focus {
 }
 .btn-31:hover::before { --progress: 0%; }
 .btn-31 .text-container { position: relative; display: block; overflow: hidden; }
-.btn-31 .text { position: relative; display: block; font-weight: 800; mix-blend-mode: difference; }
+.btn-31 .text { position: relative; display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap; font-weight: 800; mix-blend-mode: difference; }
 .btn-31:hover .text { animation: move-up-alternate 0.3s ease forwards; }
 .contact-helper-button {
   display: block;
@@ -208,7 +236,10 @@ input[type="email"]:-webkit-autofill:focus {
 .btn-more-profiles {
   position: relative;
   z-index: 0;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
   border-radius: 6em;
   padding: 1em 2.5em;
   background: white;
@@ -293,6 +324,7 @@ input[type="email"]:-webkit-autofill:focus {
   .hero-content > div:last-child { gap: 1rem; }
   .video-hero { min-height: 125svh; }
   .hero-content { min-height: 100svh; }
+  .hero-local-stat { right: 0; bottom: 3rem; left: auto; width: max-content; text-align: right; }
 }
 @media (max-width: 1279px) {
   .mobile-nav-panel {
@@ -374,7 +406,7 @@ input[type="email"]:-webkit-autofill:focus {
     border-top: 1px solid rgb(17 17 17 / 0.15);
     padding-top: 0.75rem;
   }
-  .mobile-nav-panel .nav-search-field input { border-bottom-color: rgb(17 17 17 / 0.35); color: #111; }
+  .mobile-nav-panel .nav-search-field input { border-bottom-color: rgb(17 17 17 / 0.35); background-color: transparent; color: #111; -webkit-text-fill-color: #111; caret-color: #111; mix-blend-mode: normal; }
   .mobile-nav-panel .nav-search-field label { color: rgb(17 17 17 / 0.55); }
   .mobile-nav-panel .nav-search-field input:focus ~ label,
   .mobile-nav-panel .nav-search-field input:valid ~ label { color: #111; }

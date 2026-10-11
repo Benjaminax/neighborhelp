@@ -388,6 +388,11 @@ const detailPages: Record<string, { eyebrow: string; title: string; intro: strin
     title: 'Let’s make local help easier together.',
     intro: 'Have a question, partnership idea or need help finding the right service? Send us a note and our team will get back to you.',
   },
+  '/payment-methods': {
+    eyebrow: 'Payment methods',
+    title: 'Add a payment method in seconds.',
+    intro: 'Store the way you prefer to pay so your next job or helper request is ready to move forward without friction.',
+  },
   '/about': {
     eyebrow: 'About NeighborHelp',
     title: 'A better way to show up for one another.',
@@ -435,6 +440,13 @@ const pageHighlights: Record<string, { kicker: string; metric: string; title: st
     title: 'local by nature',
     detail: 'Questions about finding a helper or joining the network? Send us a note.',
     points: ['hello@neighborhelp.co', 'Mon–Fri · 9:00–17:00'],
+  },
+  '/payment-methods': {
+    kicker: 'Simple billing',
+    metric: 'Visa · MTN',
+    title: 'one saved option, fewer delays.',
+    detail: 'Keep your preferred payment method ready for repeat work and quick settlement after a job is complete.',
+    points: ['Secure card storage', 'Mobile money ready'],
   },
   '/about': {
     kicker: 'A neighborhood-first idea',
@@ -539,6 +551,22 @@ const pageContent: Record<string, {
       ['Does this prototype deliver my message?', 'No. It demonstrates the form interaction only; no message is transmitted or stored.'],
     ],
   },
+  '/payment-methods': {
+    eyebrow: 'Keep payments ready',
+    title: 'A saved method makes the next job easier.',
+    intro: 'Choose a default option for hourly work, one-off projects or recurring local support, and keep it updated as your needs change.',
+    cards: [
+      { title: 'Add a card', body: 'Save your preferred debit or credit card for faster repeat work and cleaner follow-through on agreed jobs.' },
+      { title: 'Set a backup option', body: 'Keep a second fallback method ready if the first choice is unavailable or you want a different payout option.' },
+      { title: 'Review before paying', body: 'See the amount, timing and recipient before confirming so everyone is aligned before money changes hands.' },
+    ],
+    note: 'This payment form is a prototype only. It does not save, transmit or store real payment data.',
+    faqs: [
+      ['Can I use more than one payment method?', 'A production version could support multiple methods, including card and mobile money options for different situations.'],
+      ['Do neighbors pay before the work starts?', 'Payment timing is usually negotiated directly between both neighbors. The form is just a way to store a preferred option.'],
+      ['What happens if I need to remove a method?', 'You could update or delete a saved method from profile settings any time in a live product.'],
+    ],
+  },
   '/about': {
     eyebrow: 'A practical local network',
     title: 'Useful skills already live in our neighborhoods.',
@@ -630,8 +658,8 @@ function DetailFooter() {
           </div>
           <div className="self-end">
             <p className="mb-4 text-sm font-medium">Get local stories and useful updates</p>
-            <form className="flex flex-col gap-3 border-b border-white/40 pb-3 sm:flex-row sm:items-center" onSubmit={(event) => { event.preventDefault(); setSubscribed(true) }}>
-              <input className="min-w-0 flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/45" type="email" placeholder="Your email address" aria-label="Your email address" required />
+            <form className="footer-newsletter-form flex flex-col gap-3 border-b border-white/40 pb-3 sm:flex-row sm:items-center" onSubmit={(event) => { event.preventDefault(); setSubscribed(true) }}>
+              <input className="min-w-0 flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/45" type="email" name="email" autoComplete="email" placeholder="Your email address" aria-label="Your email address" required />
               <button className="button-lime w-fit inline-flex items-center justify-center gap-1.5" type="submit">{subscribed ? <>Thanks <Check className="h-4 w-4 shrink-0" /></> : <>Subscribe <ArrowUpRight className="h-4 w-4 shrink-0" /></>}</button>
             </form>
             <p className="mt-3 min-h-5 text-xs text-lime" aria-live="polite">{subscribed ? 'Thanks for your interest. This prototype does not save email addresses.' : ''}</p>
@@ -643,7 +671,7 @@ function DetailFooter() {
             <p className="mt-5 max-w-xs text-xs leading-relaxed text-white/40">A local marketplace for useful skills, trusted help and stronger neighborhoods.</p>
           </div>
           <div className="footer-link-group"><p className="footer-heading">Explore</p><div className="footer-links"><a href="/" className="inline-flex items-center gap-1">Home <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/find-help" className="inline-flex items-center gap-1">Find help <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/reviews" className="inline-flex items-center gap-1">Reviews <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
-          <div className="footer-link-group"><p className="footer-heading">Learn & join</p><div className="footer-links"><a href="/how-it-works" className="inline-flex items-center gap-1">How it works <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/become-a-helper" className="inline-flex items-center gap-1">Become a helper <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/about" className="inline-flex items-center gap-1">About NeighborHelp <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/safety" className="inline-flex items-center gap-1">Trust & safety <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
+          <div className="footer-link-group"><p className="footer-heading">Learn & join</p><div className="footer-links"><a href="/how-it-works" className="inline-flex items-center gap-1">How it works <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/become-a-helper" className="inline-flex items-center gap-1">Become a helper <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/payment-methods" className="inline-flex items-center gap-1">Payment methods <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/about" className="inline-flex items-center gap-1">About NeighborHelp <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="/safety" className="inline-flex items-center gap-1">Trust & safety <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a></div></div>
           <div className="footer-link-group"><p className="footer-heading">Contact</p><div className="footer-links"><a href="/contact" className="inline-flex items-center gap-1">Contact us <ArrowUpRight className="h-3.5 w-3.5 opacity-70 shrink-0" /></a><a href="mailto:hello@neighborhelp.co">hello@neighborhelp.co</a><span>Accra, Ghana</span><span>Mon–Fri · 9:00–17:00</span></div></div>
         </div>
         <div className="flex flex-col justify-between gap-3 border-t border-white/15 pt-6 text-[10px] text-white/40 sm:flex-row"><span>© 2025 NeighborHelp Accra.</span><span>Made for the neighborhood.</span></div>
@@ -664,21 +692,27 @@ function DetailPage({ pathname }: DetailPageProps) {
     ? { href: '#helper-application', label: 'Start your application' }
     : pathname === '/contact'
       ? { href: 'mailto:hello@neighborhelp.co', label: 'Email our team' }
-      : pathname === '/find-help'
-        ? { href: '#helper-directory', label: 'Browse local helpers' }
-        : { href: '/find-help', label: 'Find a helper' }
+      : pathname === '/payment-methods'
+        ? { href: '#payment-form', label: 'Add a payment method' }
+        : pathname === '/find-help'
+          ? { href: '#helper-directory', label: 'Browse local helpers' }
+          : { href: '/find-help', label: 'Find a helper' }
   const secondaryAction = pathname === '/become-a-helper'
     ? { href: '/how-it-works', label: 'See how it works' }
     : pathname === '/contact'
       ? { href: '/find-help', label: 'Browse the directory' }
-      : pathname === '/find-help'
-        ? { href: '/how-it-works', label: 'How NeighborHelp works' }
-        : { href: '/contact', label: 'Talk to our team' }
+      : pathname === '/payment-methods'
+        ? { href: '/how-it-works', label: 'See how it works' }
+        : pathname === '/find-help'
+          ? { href: '/how-it-works', label: 'How NeighborHelp works' }
+          : { href: '/contact', label: 'Talk to our team' }
   const contactHelper = pathname === '/contact' ? new URLSearchParams(window.location.search).get('helper') : null
   const [menuOpen, setMenuOpen] = useState(false)
   const [isNavVisible, setIsNavVisible] = useState(true)
   const [isNavScrolled, setIsNavScrolled] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [paymentSaved, setPaymentSaved] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'mobile-money'>('card')
   const [directorySearch, setDirectorySearch] = useState('')
   const [directoryCategory, setDirectoryCategory] = useState(() => new URLSearchParams(window.location.search).get('category') ?? 'All services')
   const [directorySort, setDirectorySort] = useState('nearest')
@@ -734,6 +768,7 @@ function DetailPage({ pathname }: DetailPageProps) {
           <a href="/reviews" className="nav-link">Reviews</a>
           <a href="/how-it-works" className="nav-link">How it works</a>
           <a href="/become-a-helper" className="nav-link">Become a helper</a>
+          <a href="/payment-methods" className="nav-link">Payment methods</a>
           <a href="/contact" className="nav-link">Contact</a>
         </div>
         <div className="flex items-center gap-4">
@@ -929,7 +964,8 @@ function DetailPage({ pathname }: DetailPageProps) {
       )}
 
       {pathname === '/become-a-helper' && <section id="helper-application" className="bg-lime"><div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16"><div className="mb-10 max-w-xl"><p className="eyebrow">Start with the basics</p><h2 className="mt-3 text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">Tell us what you bring.</h2><p className="mt-4 text-sm leading-relaxed text-black/65">Share a few details. This prototype won’t submit or store your information.</p></div><div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20"><aside className="border-t border-black/15 pt-5"><p className="text-xs uppercase tracking-[0.14em] text-black/55">A good first profile includes</p><ul className="mt-5 space-y-4 text-sm"><li className="flex gap-3"><span>01</span><span>A clear service you can provide</span></li><li className="flex gap-3"><span>02</span><span>The neighborhood you work in</span></li><li className="flex gap-3"><span>03</span><span>A way for neighbors to reach you</span></li></ul></aside><form className="helper-application-form" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="helper-name">Your name</label><input id="helper-name" name="name" autoComplete="name" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your name" required /><label className="sr-only" htmlFor="helper-skill">What can you help with?</label><input id="helper-skill" name="skill" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="What can you help with?" required /><label className="sr-only" htmlFor="helper-area">Your neighborhood</label><input id="helper-area" name="area" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your neighborhood" required /><label className="sr-only" htmlFor="helper-email">Your email</label><input id="helper-email" name="email" type="email" autoComplete="email" className="w-full border-b border-black/40 bg-transparent px-0 py-4 outline-none placeholder:text-black/50" placeholder="Your email address" required /><div className="flex flex-wrap items-center gap-5 pt-4"><button className="inline-flex items-center gap-2 bg-black px-6 py-4 text-xs font-semibold text-white transition hover:bg-black/75" type="submit">Start your application <ArrowUpRight className="h-4 w-4 shrink-0" /></button><p className="min-h-5 text-sm text-black/75" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store applications.' : ''}</p></div></form></div></div></section>}
-      {pathname === '/contact' && <section className="bg-charcoal text-white"><div className="mx-auto max-w-[1260px] px-5 py-20 sm:px-10 lg:px-16"><div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="eyebrow text-lime">We’re here to help</p><h2 className="mt-5 max-w-sm text-5xl font-medium leading-[0.9] sm:text-7xl">{contactHelper ? `Contact ${contactHelper}.` : 'Say hello.'}</h2><div className="mt-10 space-y-3 text-sm text-white/60"><p>{contactHelper ? `Send an introduction request for ${contactHelper}.` : 'Have a question or partnership idea? Send us a note.'}</p><p>hello@neighborhelp.co</p><p>Accra, Ghana · Mon–Fri, 9:00–17:00</p></div></div><form className="grid gap-5" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder="Your name" required /><label className="sr-only" htmlFor="contact-email">Email address</label><input id="contact-email" name="email" autoComplete="email" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" type="email" placeholder="Email address" required /><label className="sr-only" htmlFor="contact-topic">What can we help with?</label><select id="contact-topic" name="topic" className="border-b border-white/30 bg-charcoal px-0 py-4 text-white/70 outline-none" defaultValue={contactHelper ? 'Finding a helper' : ''} required><option value="" disabled>What can we help with?</option><option>Finding a helper</option><option>Becoming a helper</option><option>Partnerships</option></select><label className="sr-only" htmlFor="contact-message">Tell us a little more</label><textarea id="contact-message" name="message" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder={contactHelper ? `What do you need help with from ${contactHelper}?` : 'Tell us a little more'} rows={4} required /><button className="mt-3 inline-flex w-fit items-center gap-2 bg-lime px-6 py-4 text-xs font-semibold text-black transition hover:bg-white" type="submit">Send message <ArrowUpRight className="h-4 w-4 shrink-0" /></button><p className="min-h-5 text-sm text-lime" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store messages.' : ''}</p></form></div></div></section>}
+      {pathname === '/payment-methods' && <section id="payment-form" className="bg-[#f2f1ee]"><div className="mx-auto max-w-[1260px] px-5 py-20 sm:px-10 lg:px-16"><div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20"><div><p className="eyebrow">Secure and simple</p><h2 className="mt-4 max-w-sm text-4xl font-medium leading-[0.98] tracking-[-0.035em] sm:text-5xl">Add a payment method.</h2><p className="mt-5 max-w-sm text-sm leading-relaxed text-black/60">Choose the option that fits how you prefer to pay for trusted local work.</p><div className="mt-8 space-y-3 rounded-2xl border border-black/10 bg-white p-5 shadow-sm"><div className="flex items-center justify-between"><span className="text-xs uppercase tracking-[0.14em] text-black/50">Accepted</span><span className="rounded-full bg-lime px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-black">Local support</span></div><ul className="space-y-3 text-sm text-black/70"><li className="flex items-center gap-3"><span className="h-2.5 w-2.5 rounded-full bg-black" />Debit or credit card</li><li className="flex items-center gap-3"><span className="h-2.5 w-2.5 rounded-full bg-black" />Mobile money</li><li className="flex items-center gap-3"><span className="h-2.5 w-2.5 rounded-full bg-black" />Saved backup method</li></ul></div></div><form className="rounded-3xl border border-black/10 bg-white p-6 shadow-sm sm:p-8" onSubmit={(event) => { event.preventDefault(); setPaymentSaved(true) }}><div className="mb-6 flex flex-wrap gap-2"><button type="button" onClick={() => setPaymentMethod('card')} className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] ${paymentMethod === 'card' ? 'border-black bg-black text-white' : 'border-black/15 bg-transparent text-black/70'}`}>Card</button><button type="button" onClick={() => setPaymentMethod('mobile-money')} className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] ${paymentMethod === 'mobile-money' ? 'border-black bg-black text-white' : 'border-black/15 bg-transparent text-black/70'}`}>Mobile money</button></div>{paymentMethod === 'card' ? (<div className="grid gap-5"><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>Name on card</span><input className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none placeholder:text-black/40" placeholder="Ada Mensah" required /></label><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>Card number</span><input className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none placeholder:text-black/40" inputMode="numeric" placeholder="1234 5678 9012 3456" required /></label><div className="grid gap-5 sm:grid-cols-2"><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>Expiry</span><input className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none placeholder:text-black/40" placeholder="MM / YY" required /></label><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>CVV</span><input className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none placeholder:text-black/40" inputMode="numeric" placeholder="123" required /></label></div></div>) : (<div className="grid gap-5"><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>Mobile money name</span><input className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none placeholder:text-black/40" placeholder="Kofi Mensah" required /></label><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>Wallet number</span><input className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none placeholder:text-black/40" inputMode="numeric" placeholder="024 123 4567" required /></label><label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/55"><span>Network</span><select className="border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none"><option value="">Choose a network</option><option>MTN Mobile Money</option><option>Telecel Cash</option><option>AirtelTigo Money</option></select></label></div>)}<div className="mt-8 flex flex-wrap items-center gap-5"><button className="inline-flex items-center gap-2 bg-black px-6 py-4 text-xs font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black/80" type="submit">Add payment method <ArrowUpRight className="h-4 w-4 shrink-0" /></button><p className="min-h-5 text-sm text-black/75" aria-live="polite">{paymentSaved ? 'Payment method saved. This prototype does not store real card information.' : 'No payment is processed in this demo.'}</p></div></form></div></div></section>}
+      {pathname === '/contact' && <section className="bg-charcoal text-white"><div className="mx-auto max-w-[1260px] px-5 py-20 sm:px-10 lg:px-16"><div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="eyebrow text-lime">We’re here to help</p><h2 className="mt-5 max-w-sm text-5xl font-medium leading-[0.9] sm:text-7xl">{contactHelper ? `Contact ${contactHelper}.` : 'Say hello.'}</h2><div className="mt-10 space-y-3 text-sm text-white/60"><p>{contactHelper ? `Send an introduction request for ${contactHelper}.` : 'Have a question or partnership idea? Send us a note.'}</p><p>hello@neighborhelp.co</p><p>Accra, Ghana · Mon–Fri, 9:00–17:00</p></div></div><form className="contact-form grid gap-5" onSubmit={(event) => { event.preventDefault(); setFormSubmitted(true) }}><label className="sr-only" htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder="Your name" required /><label className="sr-only" htmlFor="contact-email">Email address</label><input id="contact-email" name="email" autoComplete="email" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" type="email" placeholder="Email address" required /><label className="sr-only" htmlFor="contact-topic">What can we help with?</label><select id="contact-topic" name="topic" className="border-b border-white/30 bg-charcoal px-0 py-4 text-white/70 outline-none" defaultValue={contactHelper ? 'Finding a helper' : ''} required><option value="" disabled>What can we help with?</option><option>Finding a helper</option><option>Becoming a helper</option><option>Partnerships</option></select><label className="sr-only" htmlFor="contact-message">Tell us a little more</label><textarea id="contact-message" name="message" className="border-b border-white/30 bg-transparent px-0 py-4 text-white outline-none placeholder:text-white/45" placeholder={contactHelper ? `What do you need help with from ${contactHelper}?` : 'Tell us a little more'} rows={4} required /><button className="mt-3 inline-flex w-fit items-center gap-2 bg-lime px-6 py-4 text-xs font-semibold text-black transition hover:bg-white" type="submit">Send message <ArrowUpRight className="h-4 w-4 shrink-0" /></button><p className="min-h-5 text-sm text-lime" aria-live="polite">{formSubmitted ? 'Thanks. This prototype does not send or store messages.' : ''}</p></form></div></div></section>}
       {(pathname === '/about' || pathname === '/safety') && (
         <section className="bg-charcoal text-white">
           <div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
@@ -1751,7 +1787,7 @@ function App() {
           <a className="nav-start inline-flex items-center gap-1" href="/account">Get started <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
           <form className="nav-search" onSubmit={(event) => { event.preventDefault(); setMenuOpen(false); document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }) }}>
             <div className="nav-search-field">
-              <input id="nav-search-input" value={search} onChange={(event) => setSearch(event.target.value)} required />
+              <input id="nav-search-input" name="q" type="search" autoComplete="on" value={search} onChange={(event) => setSearch(event.target.value)} required />
               <label htmlFor="nav-search-input">What do you need help with?</label>
               <span />
             </div>
@@ -1825,7 +1861,7 @@ function App() {
                 <span>★ {provider.rating} · {provider.jobs}</span>
                 <span className="font-medium">{provider.distance} km · {provider.price}</span>
               </div>
-              <button className="helper-result-action btn-31 mt-4 w-full sm:w-fit" onClick={() => openBooking(provider)}><span className="text-container"><span className="helper-action-full text inline-flex items-center gap-1">View profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span><span className="helper-action-short text inline-flex items-center gap-1">Profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></span></button>
+              <button className="helper-result-action btn-31 mt-4 w-full whitespace-nowrap sm:w-fit" onClick={() => openBooking(provider)}><span className="text-container"><span className="text inline-flex items-center gap-1 whitespace-nowrap">View profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></span></button>
             </article>
           ))}
           {!filteredProviders.length && <div className="col-span-full border border-dashed border-black/30 px-6 py-16 text-center"><p className="text-xl font-medium">No helpers found</p><p className="mt-2 text-sm text-black/55">Try another search or browse all services.</p><button className="mt-5 text-xs underline" onClick={() => { setCategory('All services'); setSearch('') }}>Clear filters</button></div>}
