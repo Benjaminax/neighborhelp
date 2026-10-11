@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowUpRight, Check, Search } from 'lucide-react'
+import { ArrowUpRight, Check, CreditCard, LockKeyhole, Search, ShieldCheck, Smartphone } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import heroVideo from './assets/Royalty-Free 4K Drone Footage City Traffic No Copyright - MK PixelSquad (1080p).mp4'
@@ -65,6 +65,29 @@ const generatedProviders: Provider[] = Array.from({ length: 46 }, (_, index) => 
 })
 
 providers.push(...generatedProviders)
+
+const providerSlug = (provider: Provider) => provider.name
+  .toLowerCase()
+  .normalize('NFKD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-|-$/g, '')
+
+const profileHistoryByCategory: Record<string, string[]> = {
+  'Home repairs': ['Kitchen tap repair', 'Furniture assembly', 'Home maintenance visit'],
+  Tutoring: ['Weekly maths session', 'Exam preparation lesson', 'Study plan check-in'],
+  'Tech help': ['Device setup and support', 'Wi-Fi troubleshooting', 'Laptop tune-up'],
+  Creative: ['Small business brand update', 'Product photography session', 'Social media design pack'],
+  Errands: ['Market shopping and delivery', 'Neighborhood pickup', 'Same-day local errand'],
+}
+
+const profileQuotesByCategory: Record<string, string[]> = {
+  'Home repairs': ['Explained the options clearly and left everything tidy.', 'The work was completed just as we agreed.', 'Friendly, punctual and easy to coordinate with.'],
+  Tutoring: ['Patient and encouraging throughout the lesson.', 'Made a difficult topic feel much easier to understand.', 'Clear plan, thoughtful teaching and great communication.'],
+  'Tech help': ['Solved the problem and showed me how to avoid it next time.', 'Quick to respond and careful with my device.', 'Clear explanation and a smooth setup from start to finish.'],
+  Creative: ['Listened closely and delivered work that fit the brief.', 'Thoughtful ideas and a polished final result.', 'Easy to work with and kept me updated along the way.'],
+  Errands: ['Kept me updated and handled everything carefully.', 'Reliable help when I needed an extra pair of hands.', 'Quick, considerate and right on time.'],
+}
 
 const reviews = [
   { quote: 'I found a designer down the road who understood exactly what I needed.', name: 'Esther A.', detail: 'Cantonments · Brand design', initials: 'EA' },
@@ -390,8 +413,8 @@ const detailPages: Record<string, { eyebrow: string; title: string; intro: strin
   },
   '/payment-methods': {
     eyebrow: 'Payment methods',
-    title: 'Add a payment method in seconds.',
-    intro: 'Store the way you prefer to pay so your next job or helper request is ready to move forward without friction.',
+    title: 'Pay your neighbor, securely.',
+    intro: 'Settle up for a local service through Paystack’s secure checkout using a card or mobile money.',
   },
   '/about': {
     eyebrow: 'About NeighborHelp',
@@ -442,11 +465,11 @@ const pageHighlights: Record<string, { kicker: string; metric: string; title: st
     points: ['hello@neighborhelp.co', 'Mon–Fri · 9:00–17:00'],
   },
   '/payment-methods': {
-    kicker: 'Simple billing',
-    metric: 'Visa · MTN',
-    title: 'one saved option, fewer delays.',
-    detail: 'Keep your preferred payment method ready for repeat work and quick settlement after a job is complete.',
-    points: ['Secure card storage', 'Mobile money ready'],
+    kicker: 'Payments powered by Paystack',
+    metric: 'GHS',
+    title: 'choose how you pay.',
+    detail: 'Your payment details are entered in Paystack checkout, not stored in NeighborHelp.',
+    points: ['Cards and mobile money', 'Secure hosted checkout'],
   },
   '/about': {
     kicker: 'A neighborhood-first idea',
@@ -680,6 +703,274 @@ function DetailFooter() {
   )
 }
 
+function PaymentCheckout() {
+  const [email, setEmail] = useState('')
+  const [amount, setAmount] = useState('100.00')
+  const [description, setDescription] = useState('')
+  const [channel, setChannel] = useState<'card' | 'mobile_money'>('card')
+  const [status, setStatus] = useState<{ kind: 'success' | 'error' | 'info'; message: string } | null>(null)
+  const [isOpeningCheckout, setIsOpeningCheckout] = useState(false)
+  const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY?.trim()
+
+  const startCheckout = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setStatus(null)
+    if (!publicKey) {
+      setStatus({ kind: 'error', message: 'Payments are not configured yet. Add a Paystack test public key to .env.local to enable checkout.' })
+      return
+    }
+
+    const amountInPesewas = Math.round(Number(amount) * 100)
+    if (!Number.isSafeInteger(amountInPesewas) || amountInPesewas < 1) {
+      setStatus({ kind: 'error', message: 'Enter an amount of at least GH₵0.01.' })
+      return
+    }
+
+    setIsOpeningCheckout(true)
+    try {
+      const { default: PaystackPop } = await import('@paystack/inline-js')
+      const paystack = new PaystackPop()
+      paystack.newTransaction({
+        key: publicKey,
+        email,
+        amount: amountInPesewas,
+        currency: 'GHS',
+        channels: [channel],
+        metadata: {
+          platform: 'NeighborHelp',
+          description: description.trim() || 'Payment for local service',
+        },
+        onSuccess: (transaction) => setStatus({
+          kind: 'success',
+          message: `Checkout completed with reference ${transaction.reference}. Verify this payment on your server before confirming the job.`,
+        }),
+        onCancel: () => setStatus({ kind: 'info', message: 'Checkout was closed before the payment was completed.' }),
+        onError: (error) => setStatus({ kind: 'error', message: `Paystack could not start checkout: ${error.message}` }),
+      })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'An unexpected checkout error occurred.'
+      setStatus({ kind: 'error', message: `Paystack could not start checkout: ${message}` })
+    } finally {
+      setIsOpeningCheckout(false)
+    }
+  }
+
+  return (
+    <section id="payment-form" className="bg-[#f2f1ee]">
+      <div className="mx-auto max-w-[1260px] px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+        <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+          <form className="rounded-3xl border border-black/10 bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.07)] sm:p-9" onSubmit={startCheckout}>
+            <div className="mb-8 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-black/45">Secure checkout · Ghana</p>
+                <h2 className="mt-3 text-3xl font-medium tracking-[-0.04em] sm:text-4xl">Pay for a local service.</h2>
+                <p className="mt-3 max-w-lg text-sm leading-relaxed text-black/55">Enter the amount you agreed with your helper. Your card or mobile money details are entered securely in Paystack checkout.</p>
+              </div>
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-lime text-black"><ShieldCheck className="h-6 w-6" aria-hidden="true" /></span>
+            </div>
+
+            <div className="grid gap-5">
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-black/55" htmlFor="checkout-amount">
+                Amount to pay
+                <span className="flex items-center border-b border-black/20 focus-within:border-black">
+                  <span className="pr-3 text-base font-medium text-black">GH₵</span>
+                  <input id="checkout-amount" name="amount" type="number" min="0.01" step="0.01" inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} className="w-full bg-transparent py-3 text-2xl font-medium text-black outline-none" required />
+                </span>
+              </label>
+              <div className="flex flex-wrap gap-2" aria-label="Suggested amounts">
+                {['50.00', '100.00', '250.00'].map((suggestedAmount) => (
+                  <button key={suggestedAmount} type="button" onClick={() => setAmount(suggestedAmount)} className={`border px-3 py-2 text-xs transition ${amount === suggestedAmount ? 'border-black bg-black text-white' : 'border-black/15 text-black/65 hover:border-black'}`}>GH₵{suggestedAmount}</button>
+                ))}
+              </div>
+
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-black/55" htmlFor="checkout-email">
+                Receipt email
+                <input id="checkout-email" name="email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" className="border-b border-black/20 bg-transparent px-0 py-3 text-base font-normal normal-case tracking-normal text-black outline-none placeholder:text-black/35 focus:border-black" required />
+              </label>
+
+              <label className="grid gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-black/55" htmlFor="checkout-description">
+                What is this payment for? <span className="font-normal normal-case tracking-normal text-black/40">Optional</span>
+                <input id="checkout-description" name="description" value={description} onChange={(event) => setDescription(event.target.value)} placeholder="e.g. Sink repair in Osu" className="border-b border-black/20 bg-transparent px-0 py-3 text-base font-normal normal-case tracking-normal text-black outline-none placeholder:text-black/35 focus:border-black" />
+              </label>
+            </div>
+
+            <fieldset className="mt-8">
+              <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-black/55">Choose a payment method</legend>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {([
+                  { id: 'card', label: 'Card', description: 'Visa, Mastercard and more', Icon: CreditCard },
+                  { id: 'mobile_money', label: 'Mobile money', description: 'Pay with your wallet', Icon: Smartphone },
+                ] as const).map(({ id, label, description: methodDescription, Icon }) => (
+                  <button key={id} type="button" aria-pressed={channel === id} onClick={() => setChannel(id)} className={`flex items-center gap-3 border p-4 text-left transition ${channel === id ? 'border-black bg-[#f5f5f2]' : 'border-black/10 hover:border-black/35'}`}>
+                    <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${channel === id ? 'bg-black text-white' : 'bg-black/5 text-black/65'}`}><Icon className="h-4 w-4" aria-hidden="true" /></span>
+                    <span><span className="block text-sm font-semibold text-black">{label}</span><span className="mt-1 block text-[11px] text-black/50">{methodDescription}</span></span>
+                    <span className={`ml-auto h-4 w-4 shrink-0 rounded-full border ${channel === id ? 'border-[5px] border-black' : 'border-black/25'}`} />
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <button type="submit" disabled={isOpeningCheckout} className="mt-8 inline-flex w-full items-center justify-center gap-2 bg-black px-6 py-4 text-xs font-semibold uppercase tracking-[0.13em] text-white transition hover:bg-black/80 disabled:cursor-wait disabled:opacity-70">
+              {isOpeningCheckout ? 'Opening secure checkout…' : 'Continue to secure checkout'} <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+            </button>
+            {status && <p className={`mt-4 border p-4 text-xs leading-relaxed ${status.kind === 'success' ? 'border-green-900/15 bg-green-50 text-green-900' : status.kind === 'error' ? 'border-red-900/15 bg-red-50 text-red-900' : 'border-black/10 bg-[#f7f6f2] text-black/70'}`} role="status" aria-live="polite">{status.message}</p>}
+            {!publicKey && <p className="mt-4 text-xs leading-relaxed text-black/55">Checkout is not connected yet. Set <code className="rounded bg-black/5 px-1 py-0.5">VITE_PAYSTACK_PUBLIC_KEY</code> in your local environment to enable Paystack.</p>}
+          </form>
+
+          <aside className="overflow-hidden rounded-3xl bg-[#151515] p-6 text-white sm:p-9">
+            <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-6">
+              <div><p className="text-[10px] uppercase tracking-[0.16em] text-white/45">Payment summary</p><p className="mt-2 text-sm text-white/75">{description.trim() || 'Local service payment'}</p></div>
+              <LockKeyhole className="h-5 w-5 text-lime" aria-hidden="true" />
+            </div>
+            <div className="py-8">
+              <p className="text-xs uppercase tracking-[0.14em] text-white/45">Total today</p>
+              <p className="mt-3 text-5xl font-medium tracking-[-0.05em]">GH₵{Number(amount || 0).toFixed(2)}</p>
+              <p className="mt-3 text-xs text-white/45">Any applicable fees are shown in Paystack checkout.</p>
+            </div>
+            <div className="space-y-4 border-t border-white/10 pt-6 text-xs">
+              <p className="flex items-center gap-3"><Check className="h-4 w-4 text-lime" aria-hidden="true" />Payment details go directly to Paystack</p>
+              <p className="flex items-center gap-3"><Check className="h-4 w-4 text-lime" aria-hidden="true" />Choose card or mobile money</p>
+              <p className="flex items-center gap-3"><Check className="h-4 w-4 text-lime" aria-hidden="true" />NeighborHelp does not store card details</p>
+            </div>
+            <p className="mt-8 border-l border-lime/60 pl-4 text-[11px] leading-relaxed text-white/50">Prototype notice: the browser success callback is not payment verification. A production service must verify each transaction with Paystack on a trusted server before marking work paid.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function HelperProfilePage({ provider }: { provider: Provider }) {
+  const providerIndex = providers.indexOf(provider)
+  const totalJobs = Number.parseInt(provider.jobs, 10) || 0
+  const fiveStar = 78 + (providerIndex % 13)
+  const remainder = 100 - fiveStar
+  const fourStar = Math.round(remainder * 0.6)
+  const threeStar = Math.round(remainder * 0.25)
+  const twoStar = Math.round(remainder * 0.1)
+  const oneStar = remainder - fourStar - threeStar - twoStar
+  const ratingBreakdown = [fiveStar, fourStar, threeStar, twoStar, oneStar]
+  const history = profileHistoryByCategory[provider.category] ?? ['Local service visit', 'Neighbor support session', 'Follow-up service']
+  const quotes = profileQuotesByCategory[provider.category] ?? profileQuotesByCategory['Home repairs']
+
+  return (
+    <main className="min-h-screen bg-[#f1f1ef] text-ink">
+      <header className="flex items-center justify-between border-b border-black/10 px-5 py-5 sm:px-10 lg:px-16">
+        <Logo />
+        <a href="/find-help" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-black/65 transition hover:text-black"><span aria-hidden="true">←</span> All helpers</a>
+      </header>
+      <section className="bg-[#151515] text-white">
+        <div className="mx-auto grid max-w-[1260px] gap-8 px-5 py-10 sm:px-10 sm:py-14 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-14 lg:px-16">
+          <div className="relative aspect-[1.2] overflow-hidden rounded-2xl bg-white/10 sm:aspect-[1.45] lg:aspect-square">
+            <img src={provider.image} alt={`${provider.name}`} className="h-full w-full object-cover" />
+            <span className="absolute bottom-4 left-4 bg-white px-3 py-2 text-[10px] font-medium uppercase tracking-[0.12em] text-black">{provider.area}, Accra</span>
+          </div>
+          <div>
+            <a href="/find-help" className="text-[10px] uppercase tracking-[0.16em] text-white/45 hover:text-white">Find help <span aria-hidden="true">/</span> {provider.category}</a>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <h1 className="text-4xl font-medium tracking-[-0.05em] sm:text-6xl">{provider.name}</h1>
+              {provider.verified && <span className="inline-flex items-center gap-1 rounded-full bg-lime px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.1em] text-black"><ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />Verified</span>}
+            </div>
+            <p className="mt-3 text-sm text-white/60">{provider.service} <span aria-hidden="true">·</span> {provider.area}</p>
+            <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/65">{provider.name} offers {provider.service.toLowerCase()} in {provider.area} and nearby neighborhoods. Review the service details, sample work history and community feedback before getting in touch.</p>
+            <div className="mt-8 grid grid-cols-3 gap-3 border-y border-white/10 py-5">
+              <div><p className="text-2xl font-medium">★ {provider.rating}</p><p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-white/40">Sample rating</p></div>
+              <div><p className="text-2xl font-medium">{totalJobs}</p><p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-white/40">Sample jobs</p></div>
+              <div><p className="text-xl font-medium">{provider.price.replace('From ', '')}</p><p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-white/40">Starting price</p></div>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href={`/contact?helper=${encodeURIComponent(provider.name)}`} className="inline-flex items-center gap-2 bg-lime px-5 py-4 text-xs font-semibold uppercase tracking-wide text-black transition hover:bg-white">Contact {provider.name.split(' ')[0]} <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" /></a>
+              <a href="/payment-methods" className="inline-flex items-center gap-2 border border-white/20 px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-white">Payment options</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-[1260px] gap-10 px-5 py-14 sm:px-10 sm:py-16 lg:grid-cols-[1fr_0.8fr] lg:gap-16 lg:px-16">
+        <div>
+          <div className="flex items-end justify-between gap-4 border-b border-black/15 pb-5">
+            <div><p className="eyebrow">Recent activity · demo</p><h2 className="mt-3 text-3xl font-medium tracking-[-0.04em]">Work history</h2></div>
+            <span className="text-xs text-black/45">{totalJobs} sample jobs</span>
+          </div>
+          <div className="divide-y divide-black/10">
+            {history.map((item, index) => (
+              <article key={item} className="grid grid-cols-[auto_1fr_auto] items-center gap-4 py-5">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-lime text-xs font-semibold">0{index + 1}</span>
+                <div><h3 className="text-sm font-medium">{item}</h3><p className="mt-1 text-xs text-black/50">{provider.category} <span aria-hidden="true">·</span> {provider.area}</p></div>
+                <span className="text-right text-[9px] uppercase tracking-[0.1em] text-black/40">{['Recent', 'Last month', 'Earlier'][index]}</span>
+              </article>
+            ))}
+          </div>
+          <p className="mt-4 border-l-2 border-black/15 pl-4 text-xs leading-relaxed text-black/50">Work history shown here is illustrative demo content, not verified transaction history.</p>
+        </div>
+
+        <aside className="rounded-2xl border border-black/10 bg-white p-6 sm:p-8">
+          <p className="eyebrow">Sample profile insights</p>
+          <h2 className="mt-3 text-3xl font-medium tracking-[-0.04em]">At a glance.</h2>
+          <div className="mt-7 grid grid-cols-2 gap-3">
+            <div className="bg-[#f2f1ee] p-4"><p className="text-2xl font-medium">{34 + (providerIndex % 29)}%</p><p className="mt-1 text-[9px] uppercase tracking-[0.11em] text-black/45">Repeat clients · demo</p></div>
+            <div className="bg-[#f2f1ee] p-4"><p className="text-2xl font-medium">{1 + (providerIndex % 5)} hrs</p><p className="mt-1 text-[9px] uppercase tracking-[0.11em] text-black/45">Reply time · demo</p></div>
+          </div>
+          <div className="mt-7">
+            <div className="flex items-center justify-between"><h3 className="text-sm font-semibold">Rating breakdown</h3><span className="text-[9px] uppercase tracking-[0.1em] text-black/40">Illustrative</span></div>
+            <div className="mt-4 space-y-2.5">
+              {ratingBreakdown.map((percent, index) => (
+                <div key={index} className="grid grid-cols-[2rem_1fr_2rem] items-center gap-3 text-xs">
+                  <span className="text-black/55">{5 - index} ★</span>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-black/5"><div className="h-full rounded-full bg-black" style={{ width: `${percent}%` }} /></div>
+                  <span className="text-right text-black/45">{percent}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section className="bg-[#e7e6e1]">
+        <div className="mx-auto max-w-[1260px] px-5 py-14 sm:px-10 sm:py-16 lg:px-16">
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-4 border-b border-black/15 pb-5">
+            <div><p className="eyebrow">Community notes · demo</p><h2 className="mt-3 text-3xl font-medium tracking-[-0.04em]">What neighbors say.</h2></div>
+            <div className="text-sm"><span className="font-medium">★ {provider.rating}</span><span className="ml-2 text-black/50">Illustrative sample rating</span></div>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            {quotes.map((quote, index) => (
+              <article key={quote} className="flex min-h-48 flex-col justify-between border border-black/10 bg-white/75 p-5">
+                <p className="text-lg leading-snug">“{quote}”</p>
+                <div className="mt-8 flex items-center justify-between gap-3 border-t border-black/10 pt-4 text-xs">
+                  <span className="font-medium">{['A neighbor', 'Local client', 'Repeat client'][index]}</span>
+                  <span className="text-black/45">{['Recent', 'A few weeks ago', 'Earlier this year'][index]}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="mt-5 text-[10px] leading-relaxed text-black/45">These comments are sample content for the prototype; they are not real customer reviews.</p>
+        </div>
+      </section>
+      <DetailFooter />
+    </main>
+  )
+}
+
+function PaymentMethodsPage() {
+  return (
+    <main className="min-h-screen bg-paper text-ink">
+      <header className="flex items-center justify-between border-b border-black/10 px-5 py-5 sm:px-10 lg:px-16">
+        <Logo />
+        <a href="/" className="text-xs font-medium text-black/60 transition hover:text-black">Back to home</a>
+      </header>
+      <section className="bg-lime">
+        <div className="mx-auto max-w-[1260px] px-5 py-12 sm:px-10 sm:py-16 lg:px-16">
+          <p className="eyebrow">Paystack checkout · Ghana</p>
+          <h1 className="mt-4 max-w-3xl text-5xl font-medium leading-[0.95] tracking-[-0.05em] sm:text-7xl">Pay your neighbor, securely.</h1>
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-black/65 sm:text-base">Choose an amount and pay for agreed local work with a card or mobile money. Payment details are handled by Paystack checkout.</p>
+        </div>
+      </section>
+      <PaymentCheckout />
+      <DetailFooter />
+    </main>
+  )
+}
+
 function DetailPage({ pathname }: DetailPageProps) {
   const pageNotFound = !detailPages[pathname]
   const page = detailPages[pathname] ?? {
@@ -883,7 +1174,7 @@ function DetailPage({ pathname }: DetailPageProps) {
                         <span className="helper-result-avatar grid h-12 w-12 shrink-0 place-items-center rounded-full text-sm font-medium text-black" style={{ backgroundColor: provider.color }}>{provider.initials}</span>
                       )}
                       <div className="min-w-0">
-                        <h3 className="truncate text-lg font-medium tracking-[-0.02em]">{provider.name}</h3>
+                        <h3 className="truncate text-lg font-medium tracking-[-0.02em]"><a className="hover:underline" href={`/helpers/${providerSlug(provider)}`}>{provider.name}</a></h3>
                         <p className="mt-1 text-xs text-black/60">{provider.service}</p>
                         <p className="helper-result-area-mobile mt-1 text-[10px] text-black/45">{provider.area}</p>
                       </div>
@@ -896,7 +1187,7 @@ function DetailPage({ pathname }: DetailPageProps) {
                     <span>★ {provider.rating} · {provider.jobs}</span>
                     <span>{provider.distance} km · {provider.price}</span>
                   </div>
-                  <a href={`/contact?helper=${encodeURIComponent(provider.name)}`} className="helper-result-action mt-4 inline-flex w-full items-center justify-center border border-black/15 bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black/80 sm:w-fit"><span className="helper-action-full inline-flex items-center gap-1">Contact helper <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span><span className="helper-action-short inline-flex items-center gap-1">Contact <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></a>
+                  <a href={`/helpers/${providerSlug(provider)}`} className="helper-result-action mt-4 inline-flex w-full items-center justify-center gap-1 border border-black/15 bg-black px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-black/80 sm:w-fit">Contact helper <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
                 </article>
               ))}
               {!directoryProviders.length && (
@@ -1321,7 +1612,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-[10px] uppercase tracking-[0.13em] text-black/45">{helper.category} · {helper.area}</p>
-                        <h3 className="mt-2 text-xl font-medium">{helper.name}</h3>
+                        <h3 className="mt-2 text-xl font-medium"><a className="hover:underline" href={`/helpers/${providerSlug(helper)}`}>{helper.name}</a></h3>
                         <p className="mt-1 text-sm text-black/60">{helper.service}</p>
                       </div>
                       {helper.verified && <span className="bg-lime px-2 py-1 text-[9px] font-semibold uppercase">Verified</span>}
@@ -1330,6 +1621,7 @@ function DashboardPage({ user }: { user: DashboardUser | null }) {
                       <span>★ {helper.rating} · {helper.jobs}</span><span>{helper.price}</span><span>{helper.distance} km away</span>
                     </div>
                     <div className="mt-5 flex gap-2">
+                      <a href={`/helpers/${providerSlug(helper)}`} className="inline-flex flex-1 items-center justify-center border border-black/15 px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-wide transition hover:border-black">View profile</a>
                       <a href={`/contact?helper=${encodeURIComponent(helper.name)}`} className="flex-1 inline-flex items-center justify-center gap-1 bg-black px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-wide text-white transition hover:bg-black/75">Contact <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></a>
                       <button type="button" aria-pressed={isSaved} onClick={() => setSavedHelpers((current) => isSaved ? current.filter((nameToRemove) => nameToRemove !== helper.name) : [...current, helper.name])} className="inline-flex items-center gap-1 border border-black/15 px-3 py-3 text-[10px] font-semibold transition hover:border-black" aria-label={`${isSaved ? 'Remove saved' : 'Save'} ${helper.name}`}>
                         {isSaved ? <>Saved <Check className="h-3.5 w-3.5 shrink-0" /></> : 'Save'}
@@ -1661,15 +1953,11 @@ function App() {
   const [isNavVisible, setIsNavVisible] = useState(true)
   const [category, setCategory] = useState('All services')
   const [search, setSearch] = useState('')
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
-  const [booked, setBooked] = useState(false)
   const [providerView, setProviderView] = useState<'grid' | 'list'>('grid')
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false)
   const [dashboardUser, setDashboardUser] = useState<DashboardUser | null>(null)
-  const previousFocusRef = useRef<HTMLElement | null>(null)
   useEffect(() => {
     const handlePopState = () => {
-      setSelectedProvider(null)
       setPathname(window.location.pathname)
     }
     window.addEventListener('popstate', handlePopState)
@@ -1723,35 +2011,11 @@ function App() {
     if (!menuOpen) setSearch('')
   }, [menuOpen])
 
-  useEffect(() => {
-    if (!selectedProvider) return
-
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    document.getElementById('close-profile-dialog')?.focus()
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setSelectedProvider(null)
-    }
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener('keydown', handleKeyDown)
-      previousFocusRef.current?.focus()
-    }
-  }, [selectedProvider])
-
   const filteredProviders = useMemo(() => providers.filter((provider) => {
     const matchesCategory = category === 'All services' || provider.category === category
     const query = search.toLowerCase()
     return matchesCategory && (!query || `${provider.name} ${provider.service} ${provider.area}`.toLowerCase().includes(query))
   }), [category, search])
-
-  const openBooking = (provider: Provider) => {
-    previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    setSelectedProvider(provider)
-    setBooked(false)
-  }
 
   if (pathname === '/account') {
     return <AccountPage onDashboard={(role, name, email) => {
@@ -1763,6 +2027,12 @@ function App() {
     }} />
   }
   if (pathname === '/dashboard/hire' || pathname === '/dashboard/work') return <DashboardPage user={dashboardUser} />
+  if (pathname === '/payment-methods') return <PaymentMethodsPage />
+  if (pathname.startsWith('/helpers/')) {
+    const slug = pathname.slice('/helpers/'.length).replace(/\/+$/, '')
+    const provider = providers.find((candidate) => providerSlug(candidate) === slug)
+    if (provider) return <HelperProfilePage provider={provider} />
+  }
   if (pathname !== '/') return <DetailPage pathname={pathname} />
 
   return (
@@ -1861,7 +2131,7 @@ function App() {
                 <span>★ {provider.rating} · {provider.jobs}</span>
                 <span className="font-medium">{provider.distance} km · {provider.price}</span>
               </div>
-              <button className="helper-result-action btn-31 mt-4 w-full whitespace-nowrap sm:w-fit" onClick={() => openBooking(provider)}><span className="text-container"><span className="text inline-flex items-center gap-1 whitespace-nowrap">View profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></span></button>
+              <a href={`/helpers/${providerSlug(provider)}`} className="helper-result-action btn-31 mt-4 inline-flex w-full whitespace-nowrap sm:w-fit"><span className="text-container"><span className="text inline-flex items-center gap-1 whitespace-nowrap">View profile <ArrowUpRight className="h-3.5 w-3.5 shrink-0" /></span></span></a>
             </article>
           ))}
           {!filteredProviders.length && <div className="col-span-full border border-dashed border-black/30 px-6 py-16 text-center"><p className="text-xl font-medium">No helpers found</p><p className="mt-2 text-sm text-black/55">Try another search or browse all services.</p><button className="mt-5 text-xs underline" onClick={() => { setCategory('All services'); setSearch('') }}>Clear filters</button></div>}
@@ -1997,38 +2267,6 @@ function App() {
         </div>
       </footer>
 
-      {selectedProvider && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/65 p-5" onClick={() => setSelectedProvider(null)}>
-          <div className="max-h-[calc(100dvh-2.5rem)] w-full max-w-md overflow-y-auto bg-paper p-7 sm:p-10" role="dialog" aria-modal="true" aria-labelledby="provider-dialog-title" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-start justify-between">
-              <div><p className="eyebrow">Provider profile</p><h2 id="provider-dialog-title" className="mt-3 text-3xl font-medium">{selectedProvider.name}</h2></div>
-              <button id="close-profile-dialog" aria-label="Close provider profile" className="text-2xl" onClick={() => setSelectedProvider(null)}>×</button>
-            </div>
-            {booked ? (
-              <div className="py-16 text-center" role="status">
-                <Check className="h-10 w-10 text-lime mx-auto stroke-[2.5]" />
-                <h3 className="mt-5 text-2xl font-medium">You’re ready to connect</h3>
-                <p className="mt-3 text-sm text-black/55">Your request preview is complete. This prototype does not send a real request to {selectedProvider.name}.</p>
-                <button className="mt-8 border border-black px-5 py-3 text-xs" onClick={() => setSelectedProvider(null)}>Done</button>
-              </div>
-            ) : (
-              <>
-                <div className="mt-7 grid grid-cols-2 gap-4 text-xs">
-                  <div className="bg-black/5 p-4"><span className="text-black/45">Service</span><p className="mt-2 font-medium">{selectedProvider.service}</p></div>
-                  <div className="bg-black/5 p-4"><span className="text-black/45">Location</span><p className="mt-2 font-medium">{selectedProvider.area}</p></div>
-                  <div className="bg-black/5 p-4"><span className="text-black/45">Rating</span><p className="mt-2 font-medium">★ {selectedProvider.rating} · {selectedProvider.jobs}</p></div>
-                  <div className="bg-black/5 p-4"><span className="text-black/45">Pricing</span><p className="mt-2 font-medium">{selectedProvider.price}</p></div>
-                </div>
-                <form onSubmit={(event) => { event.preventDefault(); setBooked(true) }}>
-                  <label className="mt-7 block text-xs font-medium" htmlFor="request-note">What do you need help with?</label>
-                  <textarea id="request-note" name="request" rows={3} required placeholder="Tell them a little about your project..." className="mt-2 w-full resize-none border border-black/20 bg-transparent p-3 text-sm outline-none focus:border-black" />
-                  <button className="button-lime mt-5 w-full inline-flex items-center justify-center gap-2" type="submit">Request an introduction <ArrowUpRight className="h-4 w-4 shrink-0" /></button>
-                </form>
-              </>
-            )}
-          </div>
-        </div>
-      )}
       </main>
     </>
   )
